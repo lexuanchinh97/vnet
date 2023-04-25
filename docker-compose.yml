@@ -40,6 +40,66 @@ services:
     networks:
       - kafka-net
 
+  db:
+    image: postgres:14.1
+    container_name: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: sales
+    ports:
+      - "5431:5432"
+
+    networks:
+      - kafka-net
+
+  producer:
+    build:
+      context: ./producer
+    container_name: producer
+    environment:
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+      SALES_FILE_ARCHIVE: /data/archived-sale-files
+      SALES_FILE_PATH: /data/sale-files
+    volumes:
+      - ./data:/data
+    ports:
+      - "8080:8080"
+    depends_on:
+      - kafka
+    networks:
+      - kafka-net
+
+  consumer:
+    build:
+      context: ./consumer
+    container_name: consumer
+    environment:
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/sales
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+    ports:
+      - "8081:8081"
+    depends_on:
+      - kafka
+      - db
+    networks:
+      - kafka-net
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: frontend
+    ports:
+      - "3000:80"
+    environment:
+      REACT_APP_PRODUCER_ENDPOINT: producer:8081
+    depends_on:
+      - consumer
+    networks:
+      - kafka-net
+
 networks:
   kafka-net:
     driver: bridge
