@@ -4,7 +4,7 @@ jobs:
   gradle:
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-latest]
     runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v3
@@ -16,5 +16,7 @@ jobs:
     - name: Setup Gradle
       uses: gradle/gradle-build-action@v2
     
-    - name: Execute Gradle build
+    - name: Build producer
       run: ./gradlew :producer:build
+    - name: Build consumer
+      run: ./gradlew :consumer:build
