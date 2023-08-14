@@ -1,0 +1,14 @@
+inputSet:
+  name: Build_vnet_1692030111385-pr-trigger-input-set
+  identifier: Build_vnet_1692030111385prtriggerinputset
+  orgIdentifier: default
+  projectIdentifier: Test
+  pipeline:
+    identifier: Build_vnet_1692030111385
+    properties:
+      ci:
+        codebase:
+          build:
+            type: PR
+            spec:
+              number: <+trigger.prNumber>
