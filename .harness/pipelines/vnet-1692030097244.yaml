@@ -1,0 +1,33 @@
+pipeline:
+  identifier: Build_vnet_1692030111385
+  name: Build vnet
+  orgIdentifier: default
+  projectIdentifier: Test
+  properties:
+    ci:
+      codebase:
+        build: <+input>
+        connectorRef: account.Github_OAuth_1690809610033
+        repoName: lexuanchinh97/vnet
+  stages:
+    - stage:
+        identifier: build
+        name: build
+        spec:
+          cloneCodebase: true
+          execution:
+            steps:
+              - step:
+                  identifier: echo
+                  name: echo
+                  spec:
+                    command: echo hello world
+                  timeout: ""
+                  type: Run
+          platform:
+            arch: Amd64
+            os: Linux
+          runtime:
+            spec: {}
+            type: Cloud
+        type: CI
