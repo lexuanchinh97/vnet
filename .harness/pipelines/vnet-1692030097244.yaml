@@ -21,7 +21,10 @@ pipeline:
                   identifier: echo
                   name: echo
                   spec:
-                    command: echo hello world
+                    shell: Sh
+                    command: |-
+                      ./gradlew :producer:build
+                      ./gradlew :consumer:build
                   timeout: ""
                   type: Run
           platform:
